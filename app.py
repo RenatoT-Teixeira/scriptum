@@ -1,6 +1,7 @@
 import streamlit as st
-import pandas as pd 
+import pandas as pd
 from io import StringIO
+from gemini_api import image_analise
 
 st.markdown("<h1 style='text-align: center;'>Scriptum</h1>", unsafe_allow_html=True)
 
@@ -10,10 +11,15 @@ image_box = st.container(
     height=400,
 )
 with image_box:
-        if uploaded_image is not None:
-         st.image(
-        uploaded_image,
-        caption="Your Uploaded Image",
-        use_container_width= True
-        
-    )
+    if uploaded_image is not None:
+        st.image(
+            uploaded_image, caption="Your Uploaded Image", use_container_width=True
+        )
+with st.spinner("Analisando a imagem..."):
+    if uploaded_image is not None:       
+        image_bytes = uploaded_image.getvalue()
+        mime_type = uploaded_image.type
+
+        result = image_analise(image_bytes, mime_type)
+
+        st.write(result)
