@@ -1,52 +1,39 @@
 transcription_prompt = """
-Você é especializado em paleografia e transcrição de documentos históricos.
+Após produzir a transcrição literal, faça também uma TRANSCRIÇÃO REVISADA.
 
-Sua ÚNICA tarefa é transcrever fielmente o texto visível na imagem.
+Na transcrição revisada, corrija somente erros de leitura que sejam praticamente inequívocos a partir da própria imagem, da estrutura da palavra e do contexto imediato.
 
-Não faça análise genealógica.
-Não explique o documento.
-Não contextualize historicamente.
-Não crie hipóteses.
-Não identifique possíveis parentescos.
-Não use conhecimento externo.
-Não resuma o conteúdo.
+Exemplos de correções permitidas:
+- caracteres claramente confundidos durante a leitura;
+- palavras divididas por mudança de linha;
+- erros que produzam uma sequência impossível quando existe uma única leitura linguística evidente;
+- sinais ou letras que possam ser confirmados comparando outras ocorrências no próprio documento.
 
-IMPORTANTE: não utilize blocos de código, crases triplas ou tabelas. Responda em texto normal.
+Não utilize conhecimento externo para realizar essas correções.
 
-Preserve o máximo possível:
-- grafia original;
+Tenha muito mais cautela com:
 - nomes próprios;
 - sobrenomes;
-- datas;
-- números;
 - localidades;
-- abreviações;
-- ortografia antiga;
-- ordem do texto.
+- datas;
+- números.
 
-Não modernize ou corrija silenciosamente o documento.
+Esses elementos não devem ser corrigidos apenas porque uma alternativa parece mais conhecida ou plausível. Se houver dúvida real, preserve a leitura incerta.
 
-Se uma palavra estiver ilegível, escreva [ilegível].
+Nunca faça uma correção silenciosamente.
 
-Se conseguir sugerir uma leitura, mas não tiver certeza, escreva [palavra?].
+Após a transcrição revisada, crie uma seção chamada CORREÇÕES REALIZADAS.
 
-Se houver duas leituras realmente plausíveis, escreva [opção1? / opção2?].
+Para cada alteração informe:
 
-Tenha atenção especial com nomes, sobrenomes, datas, números e localidades. Antes de responder, confira novamente esses elementos visualmente na imagem.
+Original: [leitura inicial]
+Revisado: [leitura corrigida]
+Motivo: [por que a correção foi considerada segura]
+Confiança: Alta / Média
 
-Não tente completar uma palavra apenas porque ela faria sentido no contexto.
+Realize automaticamente somente correções de confiança Alta.
 
-Sua resposta deve conter SOMENTE estas duas seções:
-
-TRANSCRIÇÃO FIEL
-
-Transcreva aqui todo o documento em texto normal, mantendo os parágrafos e quebras de linha naturais.
-
-TRECHOS INCERTOS
-
-Liste apenas os trechos em que realmente houver dúvida, indicando a leitura mais provável e, se necessário, uma alternativa.
-
-Não acrescente nenhum outro conteúdo.
+Correções de confiança Média devem permanecer como sugestão e não substituir o texto original.
 """
 ANALYSIS_PROMPT = """
 Você é um assistente especializado em genealogia, documentos históricos e interpretação de registros antigos.

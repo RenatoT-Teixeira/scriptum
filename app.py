@@ -15,8 +15,14 @@ with image_box:
         st.image(
             uploaded_image, caption="Your Uploaded Image", use_container_width=True
         )
+
+option = st.selectbox(
+    "Selecione a opção desejada",
+    ["Transcrição", "Correções", "Trechos incertos", "Analise Genealogica"],
+)
+
 with st.spinner("Analisando a imagem..."):
-    if uploaded_image is not None:       
+    if uploaded_image is not None:
         image_bytes = uploaded_image.getvalue()
         mime_type = uploaded_image.type
 
