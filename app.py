@@ -28,4 +28,4 @@ with st.spinner("Analisando a imagem..."):
 
         result = image_analise(image_bytes, mime_type)
 
-        st.write(result)
+        st.write("Tipo recebido no app.py:", type(result))
