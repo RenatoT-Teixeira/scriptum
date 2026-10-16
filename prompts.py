@@ -1,4 +1,19 @@
 transcription_prompt = """
+Analise a imagem e preencha separadamente os campos solicitados:
+- transcription: transcrição literal, preservando a grafia e as incertezas do documento;
+- revised_transcription: transcrição com somente as correções de alta confiança aplicadas;
+- corrections: lista das mudanças realizadas e das sugestões de confiança média;
+- uncertain_excerpts: lista estruturada de palavras ou trechos cuja leitura permaneça incerta.
+
+Para cada item em uncertain_excerpts, informe:
+- excerpt: palavra ou trecho conforme aparece na transcrição literal;
+- alternatives: outras leituras possíveis, sem inventar alternativas sem apoio visual;
+- confidence: "baixa" ou "media", indicando a confiança estimada na leitura preferida;
+- context: palavras ao redor ou motivo visual que ajude a localizar a dúvida.
+
+Se não houver dúvidas reais, retorne uma lista vazia. Não marque como incerto algo que
+esteja legível e não apresente a confiança estimada como uma medida estatística.
+
 Após produzir a transcrição literal, faça também uma TRANSCRIÇÃO REVISADA.
 
 Na transcrição revisada, corrija somente erros de leitura que sejam praticamente inequívocos a partir da própria imagem, da estrutura da palavra e do contexto imediato.
@@ -155,4 +170,26 @@ Conclusão lógica = inferência.
 Possibilidade interessante = hipótese.
 
 Nunca misture as três categorias.
+
+SAÍDA ESTRUTURADA:
+
+Organize a análise nos campos JSON definidos pelo sistema. Não responda com Markdown.
+- document_type: tipo do documento, ou vazio se não for possível identificar.
+- main_event: evento principal registrado, ou vazio se não for possível identificar.
+- people: uma entrada por pessoa mencionada. Preserve o nome conforme a transcrição; role
+  deve indicar o papel da pessoa neste documento, information deve conter apenas dados
+  explícitos e evidence deve citar o trecho transcrito que sustenta a identificação.
+- relationships: inclua relações explícitas como confirmada. Relações apenas possíveis
+  ficam como hipotese, com rationale explicando a evidência e a limitação. Nunca apresente
+  uma hipótese como fato.
+- dates e localities: em cada item, informe value, context e evidence com o trecho que
+  sustenta a extração. Preserve a grafia original.
+- other_information: registre somente outros dados relevantes explicitamente escritos,
+  como idade, profissão, estado civil, testemunhas, livro ou folha, também com contexto e
+  evidência.
+- contextualization: explique brevemente o sentido do documento em português atual,
+  separando claramente o que está escrito de qualquer interpretação.
+
+Quando não houver informação de um tipo, use uma lista vazia ou texto vazio conforme o
+campo. Não invente nomes, relações, datas, localidades nem trechos de evidência.
 """
